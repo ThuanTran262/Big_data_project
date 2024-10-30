@@ -1,0 +1,7 @@
+DATABASE = "Gold"
+USER = "postgres"
+PASSWORD = "123456"
+HOST = "localhost"
+PORT = "5432"
+SSL_MODE = "disable"
+GSSENC_MODE = "disable"
