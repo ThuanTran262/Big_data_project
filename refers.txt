@@ -1,0 +1,2 @@
+crawl data: https://stackoverflow.com/questions/69687722/how-to-get-1-minute-price-data-of-a-specific-time-and-date-from-yfinance
+dashboard: https://fireant.vn/ma-chung-khoan/GC%3DF
