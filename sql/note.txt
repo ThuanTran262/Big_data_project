@@ -1,2 +1,0 @@
-Gold.sql: database
-DataTable.sql: create schema
