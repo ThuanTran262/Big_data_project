@@ -2,6 +2,9 @@ import notebook.crawling as crawling
 from utils import database_utils as db
 import pandas as pd
 from params import tables_params as tp
+from sqlalchemy.util import deprecations
+
+deprecations.SILENCE_UBER_WARNING = True
 
 
 # DIM_DATE table
@@ -9,51 +12,87 @@ def insert_data_into_dim_date_table(data):
     date_df = split_date_to_week_month_quater_year(data)
 
     connection = db.create_connection_database()
-    date_df.to_sql(name=tp.DIM_DATE_TABLE, con=connection, if_exists="append", index=False)
+    date_df.to_sql(
+        name=tp.DIM_DATE_TABLE_NAME, con=connection, if_exists="append", index=False
+    )
     with connection.connect() as con:
         con.execute(
-            f"ALTER TABLE {tp.DIM_DATE_TABLE} "
-            f"ADD PRIMARY KEY ({tp.DATE_COLUMN});"
+            f"ALTER TABLE {tp.DIM_DATE_TABLE_NAME} "
+            f"ADD PRIMARY KEY ({tp.DATE_COLUMN_NAME});"
         )
 
 
 def split_date_to_week_month_quater_year(data):
-    date_df = data[[tp.DATE_COLUMN]]
-    date_df.drop_duplicates(inplace=True)
-    date_df.date = pd.to_datetime(date_df.date)
+    date_col = data[[tp.DATE_COLUMN_NAME]]
+    date_df = date_col.drop_duplicates(
+        subset=tp.DATE_COLUMN_NAME, inplace=False
+    ).reset_index(drop=True)
 
-    date_df[tp.WEEK_COLUMN] = (
-        date_df[tp.DATE_COLUMN].dt.isocalendar().week.apply(lambda x: "Week_" + str(x))
+    date_df.insert(
+        1,
+        column=tp.WEEK_COLUMN_NAME,
+        value=date_df[tp.DATE_COLUMN_NAME]
+        .dt.isocalendar()
+        .week.apply(lambda x: "Week_" + str(x)),
+        allow_duplicates=False,
     )
-    date_df[tp.MONTH_COLUMN] = date_df[tp.DATE_COLUMN].apply(lambda x: str(x)[:7])
-    date_df[tp.QUARTER_COLUMN] = date_df[tp.DATE_COLUMN].dt.quarter.apply(lambda x: "Q" + str(x))
-    date_df[tp.YEAR_COLUMN] = date_df[tp.DATE_COLUMN].dt.year.astype("str")
+
+    date_df.insert(
+        2,
+        column=tp.MONTH_COLUMN_NAME,
+        value=date_df[tp.DATE_COLUMN_NAME].apply(lambda x: str(x)[:7]),
+        allow_duplicates=False,
+    )
+
+    date_df.insert(
+        3,
+        column=tp.QUARTER_COLUMN_NAME,
+        value=date_df[tp.DATE_COLUMN_NAME].dt.quarter.apply(lambda x: "Q" + str(x)),
+        allow_duplicates=False,
+    )
+
+    date_df.insert(
+        4,
+        column=tp.YEAR_COLUMN_NAME,
+        value=date_df[tp.DATE_COLUMN_NAME].dt.year.astype("str"),
+        allow_duplicates=False,
+    )
 
     return date_df
 
 
 # DIM_SYMBOL table
 def insert_data_into_dim_symbol_table(data):
-    symbol_df = data[[tp.SYMBOL_COLUMN]]
-    symbol_df.drop_duplicates(inplace=True)
+    symbol_col = data[[tp.SYMBOL_COLUMN_NAME]]
+    symbol_df = symbol_col.drop_duplicates(subset=tp.SYMBOL_COLUMN_NAME).reset_index(
+        drop=True
+    )
 
     connection = db.create_connection_database()
-    symbol_df.to_sql(name=tp.DIM_SYMBOL_TABLE, con=connection, if_exists="append", index=False)
+    symbol_df.to_sql(
+        name=tp.DIM_SYMBOL_TABLE_NAME, con=connection, if_exists="append", index=False
+    )
     with connection.connect() as con:
         con.execute(
-            f"ALTER TABLE {tp.DIM_SYMBOL_TABLE} "
-            f"ADD PRIMARY KEY ({tp.SYMBOL_COLUMN});")
+            f"ALTER TABLE {tp.DIM_SYMBOL_TABLE_NAME} "
+            f"ADD PRIMARY KEY ({tp.SYMBOL_COLUMN_NAME});"
+        )
 
 
 # DIM_FACT_GOLD_PRICE table
 def insert_data_in_current_year_into_fact_gold_data_table(data):
     connection = db.create_connection_database()
-    data.to_sql(name=tp.FACT_GOLD_DATA_TABLE, con=connection, if_exists="append", index=False)
+    data.to_sql(
+        name=tp.FACT_GOLD_DATA_TABLE_NAME,
+        con=connection,
+        if_exists="append",
+        index=False,
+    )
     with connection.connect() as con:
         con.execute(
-            f"ALTER TABLE {tp.FACT_GOLD_DATA_TABLE} "
-            f"ADD FOREIGN KEY ({tp.DATE_COLUMN}) REFERENCES dim_date({tp.DATE_COLUMN}), "
-            f"ADD FOREIGN KEY ({tp.SYMBOL_COLUMN}) REFERENCES dim_symbol({tp.SYMBOL_COLUMN});"
+            f"ALTER TABLE {tp.FACT_GOLD_DATA_TABLE_NAME} "
+            f"ADD FOREIGN KEY ({tp.DATE_COLUMN_NAME}) REFERENCES dim_date({tp.DATE_COLUMN_NAME}), "
+            f"ADD FOREIGN KEY ({tp.SYMBOL_COLUMN_NAME}) REFERENCES dim_symbol({tp.SYMBOL_COLUMN_NAME});"
         )
 
 

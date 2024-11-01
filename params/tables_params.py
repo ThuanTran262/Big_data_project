@@ -1,4 +1,5 @@
 GOLD_TICKER = "GC=F"
+
 INTERVAL_1_MINUTE = "1m"  
 INTERVAL_1_DAY = "1d"
 INTERVAL_1_WEEK = "1wk"
@@ -11,16 +12,16 @@ COLUMNS_NAMES_LIST = ["symbol","date","adj_close_price",
                     "open_price","volumn"]
 
 
-DIM_SYMBOL_TABLE = "dim_symbol"
-DIM_DATE_TABLE = "dim_date"
-FACT_GOLD_DATA_TABLE = "fact_gold_data"
+DIM_SYMBOL_TABLE_NAME = "dim_symbol"
+DIM_DATE_TABLE_NAME = "dim_date"
+FACT_GOLD_DATA_TABLE_NAME = "fact_gold_data"
 
-DATE_COLUMN = "date"
-WEEK_COLUMN = "week"
-QUARTER_COLUMN = "quarter"
-YEAR_COLUMN = "year"
-MONTH_COLUMN = "month"
+DATE_COLUMN_NAME = "date"
+WEEK_COLUMN_NAME = "week"
+QUARTER_COLUMN_NAME = "quarter"
+YEAR_COLUMN_NAME = "year"
+MONTH_COLUMN_NAME = "month"
 
-SYMBOL_COLUMN = "symbol"
+SYMBOL_COLUMN_NAME = "symbol"
 
 
