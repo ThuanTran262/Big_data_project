@@ -3,7 +3,7 @@ import datetime
 from dateutil.relativedelta import relativedelta
 from params import tables_params as tp
 
-START_DATE = (datetime.datetime.now() + relativedelta(hours=-24)).strftime("%Y-%m-%d")
+START_DATE = (datetime.datetime.now() + relativedelta(hours=-48)).strftime("%Y-%m-%d")
 START_YEAR = (datetime.datetime.now()).strftime("%Y")
 
 
@@ -15,7 +15,7 @@ def crawl_data_every_minute():
     data.insert(0, tp.SYMBOL_COLUMN_NAME, tp.GOLD_TICKER)
     data.columns = tp.COLUMNS_NAMES_LIST
 
-    return
+    return data
 
 
 def crawl_data_every_day():
