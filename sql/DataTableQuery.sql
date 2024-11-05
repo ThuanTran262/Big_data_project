@@ -3,6 +3,8 @@ DROP TABLE IF EXISTS temp_gold_data;
 DROP TABLE IF EXISTS fact_gold_data;
 DROP TABLE IF EXISTS dim_date;
 DROP TABLE IF EXISTS dim_symbol;
+DROP TABLE IF EXISTS real_time_fact_gold_data;
+DROP TABLE IF EXISTS real_time_dim_date;
 
 -- Tạo bảng temp_gold_data
 CREATE TEMPORARY TABLE IF NOT EXISTS temp_gold_data (
@@ -67,3 +69,14 @@ select * from fact_gold_data;
 select * from dim_date;
 select * from dim_symbol;
 
+DROP TABLE IF EXISTS temp_gold_data;
+DROP TABLE IF EXISTS fact_gold_data;
+DROP TABLE IF EXISTS dim_date;
+DROP TABLE IF EXISTS dim_symbol;
+DROP TABLE IF EXISTS real_time_fact_gold_data;
+DROP TABLE IF EXISTS real_time_dim_date;
+
+
+select * from real_time_fact_gold_data;
+select * from real_time_dim_date;
+select * from dim_symbol;
