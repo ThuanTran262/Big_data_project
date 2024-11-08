@@ -14,3 +14,15 @@ def create_connection_database():
     )
     return create_engine(url)
 
+
+def create_conn():
+    conn = pg.connect(
+            database=dbc.DATABASE, 
+            user = dbc.USER, 
+            password = dbc.PASSWORD, 
+            host = dbc.HOST, 
+            port = dbc.PORT,
+            sslmode=dbc.SSL_MODE,
+            gssencmode=dbc.GSSENC_MODE)
+    return conn
+
