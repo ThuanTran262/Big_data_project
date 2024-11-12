@@ -7,7 +7,6 @@ from sklearn.preprocessing import MinMaxScaler
 model = load_model('my_model.h5')
 
 # load data
-# load data
 conn = create_conn()
 print(conn)
 data = pd.read_sql_query("select Date, Close from fact_gold_data",con = conn)
