@@ -10,9 +10,9 @@ def get_x_y(data_array, n=100):
     """
     x_data = []
     y_data = []
-    for i in range(n, len(data_array)):
+    for i in range(n, len(data_array)-1):
         x_data.append(data_array[(i-n):i])
-        y_data.append(data_array[i])
+        y_data.append(data_array[i+1])
     x_data, y_data = np.array(x_data), np.array(y_data)
     return x_data, y_data
 

@@ -5,8 +5,6 @@ from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential
 from tensorflow.keras import layers
 from tensorflow.keras.optimizers import Adam
-import matplotlib.pyplot as plt
-from sklearn.metrics import mean_absolute_error, mean_absolute_percentage_error, mean_squared_error
 
 from utils.model_utils import get_x_y, train_test_split
 from utils.database_utils import create_conn, create_connection_database
