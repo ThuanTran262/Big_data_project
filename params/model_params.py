@@ -1,1 +1,2 @@
 N_DAY=30
+ROOT_PATH = ''
