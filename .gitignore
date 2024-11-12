@@ -2,6 +2,10 @@
 venv/
 py/delete.py
 __pychache__/
-.vscode
+.vscode/settings.json
 .ipynb_checkpoints
 .conda
+notebook/__pychache__
+notebook/.ipynb_checkpoints
+params/__pychache__
+utils/__pychache__
