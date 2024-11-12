@@ -1,3 +1,7 @@
 .idea/
 venv/
 py/delete.py
+__pychache__/
+.vscode
+.ipynb_checkpoints
+.conda

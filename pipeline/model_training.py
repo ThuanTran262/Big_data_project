@@ -21,11 +21,11 @@ print(conn)
 data = pd.read_sql_query("select * from fact_gold_data",con = conn)
 
 # data preprocessing
-data = data[['Date', 'Close']]
-data.index = data.pop('Date')
+data = data[['date', 'close']]
+data.index = data.pop('date')
 
 scaler = MinMaxScaler(feature_range=(0,1))
-scaled_data = scaler.fit_transform(data[["Close"]])
+scaled_data = scaler.fit_transform(data[["close"]])
 
 x_data, y_data = get_x_y(scaled_data, n=model_params.N_DAY)
 x_train, y_train, x_test, y_test = train_test_split(x_data, y_data)
@@ -57,4 +57,4 @@ print(engine)
 model_result.to_sql(name="model_result", con=engine, if_exists = "append", index = False)
 
 # save model
-model.save('.../model/my_model.h5', overwrite=True)
+model.save('D:/thuantt2/Document/Big_data_project/model/my_model.h5', overwrite=True)
