@@ -3,6 +3,7 @@ from datetime import datetime
 from tensorflow.keras.models import load_model
 from sklearn.preprocessing import MinMaxScaler
 
+from params.model_params import *
 from utils.date_helper import get_date_range
 from utils.database_utils import create_conn, create_connection_database
 
@@ -14,7 +15,7 @@ next_date = get_date_range(report_date, 0, 1)[-1]
 
 
 # load model
-model = load_model('../model/my_model.h5')
+model = load_model(f'{ROOT_PATH}/model/my_model.h5')
 
 # load data
 conn = create_conn()

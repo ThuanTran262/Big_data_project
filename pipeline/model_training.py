@@ -8,7 +8,7 @@ from tensorflow.keras.optimizers import Adam
 
 from utils.model_utils import get_x_y, train_test_split
 from utils.database_utils import create_conn, create_connection_database
-from params import model_params
+from params.model_params import N_DAY, ROOT_PATH
 
 train_date = datetime.strftime(datetime.today(), '%Y-%m-%d')
 print(f'Train date: {train_date}')
@@ -25,11 +25,11 @@ data.index = data.pop('date')
 scaler = MinMaxScaler(feature_range=(0,1))
 scaled_data = scaler.fit_transform(data[["close"]])
 
-x_data, y_data = get_x_y(scaled_data, n=model_params.N_DAY)
+x_data, y_data = get_x_y(scaled_data, n=N_DAY)
 x_train, y_train, x_test, y_test = train_test_split(x_data, y_data)
 
 # train model
-model = Sequential([layers.Input((model_params.N_DAY, 1)), 
+model = Sequential([layers.Input((N_DAY, 1)), 
                     layers.LSTM(64),
                     layers.Dense(32, activation='relu'),
                     layers.Dense(32, activation='relu'),
@@ -55,4 +55,4 @@ print(engine)
 model_result.to_sql(name="model_result", con=engine, if_exists = "append", index = False)
 
 # save model
-model.save('D:/thuantt2/Document/Big_data_project/model/my_model.h5', overwrite=True)
+model.save(f'{ROOT_PATH}/model/my_model.h5', overwrite=True)
