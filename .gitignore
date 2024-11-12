@@ -1,3 +1,4 @@
 .idea/
 venv/
 py/delete.py
+*__pychache__*
