@@ -1,4 +1,4 @@
-import notebook.crawling as crawling
+import utils.crawling_utils as crawling
 from utils import database_utils as db
 import pandas as pd
 from params import tables_params as tp
