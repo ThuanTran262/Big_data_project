@@ -1,4 +1,4 @@
-import notebook.crawling as crawling
+import utils.crawling_utils as crawling
 from utils import database_utils as db
 import pandas as pd
 from params import tables_params as tp
@@ -169,15 +169,15 @@ def insert_real_time_data_in_current_year_into_fact_gold_data_table(data):
 # insert data into DATABASE
 def insert_data_into_database_from_beginning():
     data = crawling.crawl_data_in_current_year()
-    real_time_data = crawling.crawl_data_every_minute()
+    # real_time_data = crawling.crawl_data_every_minute()
 
     insert_data_into_dim_symbol_table(data)
 
     insert_data_into_dim_date_table(data)
     insert_data_in_current_year_into_fact_gold_data_table(data)
 
-    insert_data_into_real_time_dim_date_table(real_time_data)
-    insert_real_time_data_in_current_year_into_fact_gold_data_table(real_time_data)
+    # insert_data_into_real_time_dim_date_table(real_time_data)
+    # insert_real_time_data_in_current_year_into_fact_gold_data_table(real_time_data)
 
 
 def insert_data_in_database_everyday():
@@ -189,5 +189,5 @@ def insert_data_in_database_everyday():
 
 
 # CALL insert functions
-insert_data_into_database_from_beginning()
-insert_data_in_database_everyday()
+# insert_data_into_database_from_beginning()
+# insert_data_in_database_everyday()
