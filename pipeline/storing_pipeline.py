@@ -168,7 +168,7 @@ def insert_real_time_data_in_current_year_into_fact_gold_data_table(data):
 
 # insert data into DATABASE
 def insert_data_into_database_from_beginning():
-    data = crawling_utils.crawl_data_in_current_year()
+    data = crawling_utils.crawl_data_from_beginning()
     real_time_data = crawling_utils.crawl_data_every_minute()
 
     insert_data_into_dim_symbol_table(data)
