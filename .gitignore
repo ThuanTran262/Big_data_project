@@ -8,4 +8,6 @@ notebook/.ipynb_checkpoints/
 .vscode/settings.json
 params/__pychache__/
 utils/__pychache__/
+pipeline/__pychache__/
+dags/__pychache__/
 .ipynb_checkpoints
