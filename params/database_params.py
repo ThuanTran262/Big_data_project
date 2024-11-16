@@ -1,4 +1,4 @@
-DATABASE = "Gold"
+DATABASE = "postgres"
 USER = "postgres"
 PASSWORD = "123456"
 HOST = "localhost"
