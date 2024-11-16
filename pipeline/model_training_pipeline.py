@@ -13,8 +13,8 @@ from utils.model_utils import get_x_y, train_test_split
 from utils.database_utils import create_conn, create_connection_database
 from params.model_params import N_DAY, ROOT_PATH
 
-def model_training():
-    train_date = datetime.strftime(datetime.today(), '%Y-%m-%d')
+def model_training(train_date):
+    # train_date = datetime.strftime(train_date, '%Y-%m-%d')
     print(f'Train date: {train_date}')
 
     # load data
@@ -60,4 +60,3 @@ def model_training():
 
     # save model
     model.save(f'{ROOT_PATH}/model/my_model.keras', overwrite=True)
-model_training()

@@ -13,15 +13,15 @@ from utils.date_helper_utils import get_date_range, get_lag_nday_excl_weekend
 from utils.database_utils import create_conn, create_connection_database
 
 
-def model_prediction():
-    report_date = datetime.strftime(datetime.today(), '%Y-%m-%d')
+def model_prediction(report_date):
+    # report_date = datetime.strftime(datetime.today(), '%Y-%m-%d')
     date_li = get_lag_nday_excl_weekend(report_date, 30, 100)
     start_date = date_li[-1]
     end_date = date_li[0]
     next_date = get_date_range(report_date, 0, 1)[0]
 
     # load model
-    model = load_model('/home/thuantt/airflow/Big_data_project/model/my_model.keras')
+    model = load_model(f'{ROOT_PATH}/model/my_model.keras')
 
     # load data
     conn = create_conn()
@@ -47,5 +47,3 @@ def model_prediction():
     engine = create_connection_database()
     print(engine)
     result.to_sql(name="model_prediction", con=engine, if_exists = "append", index = False)
-
-model_prediction()

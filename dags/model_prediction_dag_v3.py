@@ -5,27 +5,32 @@ from airflow.sensors.external_task import ExternalTaskSensor
 from datetime import datetime
 from datetime import timedelta
 
-# import os
-# os.environ['PYTHONPATH'] = "/home/thuantt/airflow/Big_data_project"
 import sys
 sys.path.insert(0, "/home/thuantt/airflow/Big_data_project")
 
-from pipeline.crawling_data import insert_data_in_database_everyday 
+from pipeline.model_prediction_pipeline import model_prediction 
 
-interval = '0 0 * * *'
-dag = DAG(dag_id='etl_data',
-         start_date=datetime(2024,11,10),
+interval = '0 2 * * *'
+ds = '{{ds}}'
+args = {
+        'start_date': datetime(2024,1,1),
+        'wait_for_downstream': True,
+        'depends_on_past': True}
+
+dag = DAG(dag_id='model_prediction_v5',
+         default_args=args,
          schedule_interval=interval,
          catchup=False)
 
 start_task = DummyOperator(
     task_id='start_task',
-    dag=dag
+    dag=dag,
 )
 
-etl_data = PythonOperator(
-        task_id='etl_gold_data',
-        python_callable=insert_data_in_database_everyday,
+predict_data = PythonOperator(
+        task_id='predict_data',
+        python_callable=model_prediction,
+        op_args=[ds],
         dag=dag)
 
 end_task = DummyOperator(
@@ -34,4 +39,4 @@ end_task = DummyOperator(
 )
 
 # Set task dependencies
-start_task >> etl_data >> end_task
+start_task >> predict_data >> end_task
