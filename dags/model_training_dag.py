@@ -17,10 +17,10 @@ args = {
         'wait_for_downstream': True,
         'depends_on_past': True}
 
-dag = DAG(dag_id='training_model_v5',
+dag = DAG(dag_id='model_training_dag',
          default_args=args,
          schedule_interval=interval,
-         catchup=False)
+         catchup=True)
 
 start_task = DummyOperator(
     task_id='start_task',
