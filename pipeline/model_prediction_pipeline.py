@@ -3,7 +3,6 @@ import numpy as np
 from datetime import datetime
 from tensorflow.keras.models import load_model
 from sklearn.preprocessing import MinMaxScaler
-import h5py
 
 import sys
 sys.path.insert(0, "/home/thuantt/airflow/Big_data_project")
@@ -14,9 +13,7 @@ from utils.database_utils import create_conn, create_connection_database
 
 
 def model_prediction(report_date):
-    # report_date = datetime.strftime(datetime.today(), '%Y-%m-%d')
     date_li = get_lag_nday_excl_weekend(report_date, 30, 100)
-    start_date = date_li[-1]
     end_date = date_li[0]
     next_date = get_date_range(report_date, 0, 1)[0]
 
@@ -25,9 +22,9 @@ def model_prediction(report_date):
 
     # load data
     conn = create_conn()
-    print(conn)
-    data = pd.read_sql_query(f"select date, close from fact_gold_data where date(date) >= '{start_date}' and\
-                             date(date) <= '{end_date}'",con = conn)
+    data = pd.read_sql_query(f"select date, close, row_number() over(partition by symbol order by date desc) rn \
+                              from fact_gold_data where date(date) <= '{end_date}'", con=conn)
+    data = data.query(f'rn <= {N_DAY}')[['date', 'close']]
 
     # data preprocessing
     scaler = MinMaxScaler(feature_range=(0,1))

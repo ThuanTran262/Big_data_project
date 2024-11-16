@@ -5,8 +5,7 @@ from airflow.sensors.external_task import ExternalTaskSensor
 from datetime import datetime
 from datetime import timedelta
 
-# import os
-# os.environ['PYTHONPATH'] = "/home/thuantt/airflow/Big_data_project"
+
 import sys
 sys.path.insert(0, "/home/thuantt/airflow/Big_data_project")
 
@@ -16,7 +15,7 @@ interval = '0 0 * * *'
 dag = DAG(dag_id='etl_data',
          start_date=datetime(2024,11,10),
          schedule_interval=interval,
-         catchup=False)
+         catchup=True)
 
 start_task = DummyOperator(
     task_id='start_task',
