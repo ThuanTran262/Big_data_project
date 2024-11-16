@@ -1,7 +1,6 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.dummy_operator import DummyOperator
-from airflow.sensors.external_task import ExternalTaskSensor
 from datetime import datetime
 from datetime import timedelta
 
@@ -17,10 +16,10 @@ args = {
         'wait_for_downstream': True,
         'depends_on_past': True}
 
-dag = DAG(dag_id='model_prediction_v5',
+dag = DAG(dag_id='model_prediction_dag2',
          default_args=args,
          schedule_interval=interval,
-         catchup=False)
+         catchup=True)
 
 start_task = DummyOperator(
     task_id='start_task',
