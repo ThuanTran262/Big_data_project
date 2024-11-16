@@ -5,7 +5,6 @@ from params import tables_params as tp
 from sqlalchemy.util import deprecations
 from datetime import timedelta
 
-
 deprecations.SILENCE_UBER_WARNING = True
 
 
@@ -191,7 +190,6 @@ def insert_data_into_database_from_beginning():
     data = crawling.crawl_data_from_beginning()
 
     insert_data_into_dim_symbol_table(data)
-
     insert_data_into_dim_date_table(data)
     insert_data_into_fact_gold_data_table(data)
 
