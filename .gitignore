@@ -3,11 +3,11 @@ venv/
 .venv/
 .vscode/
 py/delete.py
-notebook/__pycache__/
 notebook/.ipynb_checkpoints/
 .vscode/settings.json
-params/__pycache__/
-utils/__pycache__/
-pipeline/__pycache__/
-dags/__pycache__/
 .ipynb_checkpoints
+dags/__pycache__
+params/__pycache__
+pipeline/__pycache__
+utils/__pycache__
+notebook/__pycache__
