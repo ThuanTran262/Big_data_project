@@ -1,4 +1,4 @@
-import utils.crawling_utils as crawling
+import utils.crawling_utils as crawling_utils
 from utils import database_utils as db
 import pandas as pd
 from params import tables_params as tp
@@ -15,8 +15,13 @@ def insert_data_into_dim_date_table(data):
 
     connection = db.create_connection_database()
     date_df.to_sql(
-        name=tp.DIM_DATE_TABLE_NAME, con=connection, if_exists="replace", index=False
+        name=tp.DIM_DATE_TABLE_NAME, con=connection, if_exists="append", index=False
     )
+    with connection.connect() as con:
+        con.execute(
+            f"ALTER TABLE {tp.DIM_DATE_TABLE_NAME} "
+            f"ADD PRIMARY KEY ({tp.DATE_COLUMN_NAME});"
+        )
 
 
 def split_date_to_week_month_quater_year(data):
@@ -56,15 +61,6 @@ def split_date_to_week_month_quater_year(data):
     )
 
     return date_df
-
-
-def insert_data_into_dim_date_table_everyday(data):
-    date_df = split_date_to_week_month_quater_year(data)
-
-    connection = db.create_connection_database()
-    date_df.to_sql(
-        name=tp.DIM_DATE_TABLE_NAME, con=connection, if_exists="append", index=False
-    )
 
 
 # REAL_TIME_DIM_DATE table
@@ -119,17 +115,20 @@ def split_date_to_hour_minute_second(data):
 
 # DIM_SYMBOL table
 def insert_data_into_dim_symbol_table(data):
-    symbol_col = data[[tp.SYMBOL_COLUMN_ID]]
-    symbol_df = symbol_col.drop_duplicates(subset=tp.SYMBOL_COLUMN_ID).reset_index(
+    symbol_col = data[[tp.SYMBOL_COLUMN_NAME]]
+    symbol_df = symbol_col.drop_duplicates(subset=tp.SYMBOL_COLUMN_NAME).reset_index(
         drop=True
     )
-    symbol_df.insert(1, tp.SYMBOL_COLUMN_NAME, tp.GOLD_TICKER)
-
 
     connection = db.create_connection_database()
     symbol_df.to_sql(
-        name=tp.DIM_SYMBOL_TABLE_NAME, con=connection, if_exists="replace", index=False
+        name=tp.DIM_SYMBOL_TABLE_NAME, con=connection, if_exists="append", index=False
     )
+    with connection.connect() as con:
+        con.execute(
+            f"ALTER TABLE {tp.DIM_SYMBOL_TABLE_NAME} "
+            f"ADD PRIMARY KEY ({tp.SYMBOL_COLUMN_NAME});"
+        )
 
 
 # FACT_GOLD_PRICE table
@@ -138,9 +137,15 @@ def insert_data_in_current_year_into_fact_gold_data_table(data):
     data.to_sql(
         name=tp.FACT_GOLD_DATA_TABLE_NAME,
         con=connection,
-        if_exists="replace",
+        if_exists="append",
         index=False,
     )
+    with connection.connect() as con:
+        con.execute(
+            f"ALTER TABLE {tp.FACT_GOLD_DATA_TABLE_NAME} "
+            f"ADD FOREIGN KEY ({tp.DATE_COLUMN_NAME}) REFERENCES dim_date({tp.DATE_COLUMN_NAME}), "
+            f"ADD FOREIGN KEY ({tp.SYMBOL_COLUMN_NAME}) REFERENCES dim_symbol({tp.SYMBOL_COLUMN_NAME});"
+        )
 
 
 # REAL_TIME_FACT_GOLD_PRICE table
@@ -153,31 +158,36 @@ def insert_real_time_data_in_current_year_into_fact_gold_data_table(data):
         if_exists="append",
         index=False,
     )
+    with connection.connect() as con:
+        con.execute(
+            f"ALTER TABLE {tp.REAL_TIME_FACT_GOLD_DATA_TABLE_NAME} "
+            f"ADD FOREIGN KEY ({tp.DATE_COLUMN_NAME}) REFERENCES real_time_dim_date({tp.DATE_COLUMN_NAME}), "
+            f"ADD FOREIGN KEY ({tp.SYMBOL_COLUMN_NAME}) REFERENCES dim_symbol({tp.SYMBOL_COLUMN_NAME});"
+        )
 
 
 # insert data into DATABASE
 def insert_data_into_database_from_beginning():
-    data = crawling.crawl_data_in_current_year()
-    # real_time_data = crawling.crawl_data_every_minute()
+    data = crawling_utils.crawl_data_in_current_year()
+    real_time_data = crawling_utils.crawl_data_every_minute()
 
     insert_data_into_dim_symbol_table(data)
 
     insert_data_into_dim_date_table(data)
     insert_data_in_current_year_into_fact_gold_data_table(data)
 
-    # insert_data_into_real_time_dim_date_table(real_time_data)
-    # insert_real_time_data_in_current_year_into_fact_gold_data_table(real_time_data)
+    insert_data_into_real_time_dim_date_table(real_time_data)
+    insert_real_time_data_in_current_year_into_fact_gold_data_table(real_time_data)
 
 
 def insert_data_in_database_everyday():
-    data = crawling.crawl_data_every_day()
+    data = crawling_utils.crawl_data_every_day()
 
     insert_data_into_dim_symbol_table(data)
     insert_data_into_dim_date_table(data)
     insert_data_in_current_year_into_fact_gold_data_table(data)
-    
 
 
 # CALL insert functions
-# insert_data_into_database_from_beginning()
+insert_data_into_database_from_beginning()
 insert_data_in_database_everyday()
