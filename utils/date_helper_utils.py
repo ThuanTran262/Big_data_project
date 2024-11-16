@@ -29,7 +29,19 @@ def get_date_range(date, n_lag, m_lead):
     date_to_time = datetime.strptime(date, '%Y-%m-%d')
     date_before = [datetime.strftime(date_to_time + timedelta(days=-i), '%Y-%m-%d') for i in range(1, n_lag+1)]
     date_after = [datetime.strftime(date_to_time + timedelta(days=i), '%Y-%m-%d') for i in range(1, m_lead+1)]
-    date_li.extend(date_before)
-    date_li.extend([date])
     date_li.extend(date_after)
+    date_li.extend([date])
+    date_li.extend(date_before)
     return date_li
+
+def get_lag_nday_excl_weekend(date, n_day, max_day):
+    date_li = get_date_range(date, n_lag=max_day, m_lead=0)
+    weekdays = [5, 6]
+    date_li_excl_weekend = []
+    for dt in date_li[1:]:
+        dt = datetime.strptime(dt, '%Y-%m-%d')
+        if dt.weekday() not in weekdays:
+            dt = datetime.strftime(dt, '%Y-%m-%d')
+            date_li_excl_weekend.append(dt)
+    return date_li_excl_weekend[:n_day]
+    
