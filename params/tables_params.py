@@ -10,11 +10,11 @@ YEARS_AGO = -3
 COLUMNS_NAMES_LIST = [
     "symbol",
     "date",
-    "adj_close_price",
-    "close_price",
-    "high_price",
-    "low_price",
-    "open_price",
+    "adj_close",
+    "close",
+    "high",
+    "low",
+    "open",
     "volumn",
 ]
 
@@ -35,4 +35,6 @@ HOUR_COLUMN_NAME = "hour"
 MINUTE_COLUMN_NAME = "minute"
 SECOND_COLUMN_NAME = "second"
 
-SYMBOL_COLUMN_NAME = "symbol"
+SYMBOL_COLUMN_ID = "symbol"
+SYMBOL_COLUMN_NAME = "symbol_name"
+
