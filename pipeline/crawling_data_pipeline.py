@@ -14,25 +14,6 @@ def insert_data_into_dim_date_table(data):
     date_df = split_date_to_week_month_quater_year(data)
 
     connection = db.create_connection_database()
-<<<<<<< Updated upstream:pipeline/crawling_data.py
-    date_df.to_sql(
-        name=tp.DIM_DATE_TABLE_NAME, con=connection, if_exists="append", index=False
-    )
-    with connection.connect() as con:
-        con.execute(
-            f"ALTER TABLE {tp.DIM_DATE_TABLE_NAME} "
-            f"ADD PRIMARY KEY ({tp.DATE_COLUMN_NAME});"
-        )
-
-
-def insert_data_into_dim_date_table_everyday(data):
-    date_df = split_date_to_week_month_quater_year(data)
-
-    connection = db.create_connection_database()
-    date_df.to_sql(
-        name=tp.DIM_DATE_TABLE_NAME, con=connection, if_exists="append", index=False
-    )
-=======
     try:
         date_df.to_sql(
             name=tp.DIM_DATE_TABLE_NAME, con=connection, if_exists="append", index=False
@@ -44,19 +25,6 @@ def insert_data_into_dim_date_table_everyday(data):
             )
     except:
         print("Duplicate data")
->>>>>>> Stashed changes:pipeline/crawling_data_pipeline.py
-
-
-# def insert_data_into_dim_date_table_everyday(data):
-#     date_df = split_date_to_week_month_quater_year(data)
-
-#     connection = db.create_connection_database()
-#     try:
-#         date_df.to_sql(
-#             name=tp.DIM_DATE_TABLE_NAME, con=connection, if_exists="append", index=False
-#         )
-#     except:
-#         print("Duplicate data")
 
 
 def split_date_to_week_month_quater_year(data):
