@@ -5,7 +5,6 @@ from params import tables_params as tp
 from sqlalchemy.util import deprecations
 from datetime import timedelta
 
-
 deprecations.SILENCE_UBER_WARNING = True
 
 
@@ -28,9 +27,12 @@ def insert_data_into_dim_date_table_everyday(data):
     date_df = split_date_to_week_month_quater_year(data)
 
     connection = db.create_connection_database()
-    date_df.to_sql(
-        name=tp.DIM_DATE_TABLE_NAME, con=connection, if_exists="append", index=False
-    )
+    try:
+        date_df.to_sql(
+            name=tp.DIM_DATE_TABLE_NAME, con=connection, if_exists="append", index=False
+        )
+    except:
+        print("Duplicate data")
 
 
 def split_date_to_week_month_quater_year(data):
@@ -156,11 +158,10 @@ def insert_real_time_data_in_current_year_into_fact_gold_data_table(data):
 
 # insert data into DATABASE
 def insert_data_into_database_from_beginning():
-    data = crawling.crawl_data_in_current_year()
+    data = crawling.crawl_data_from_beginning()
     # real_time_data = crawling.crawl_data_every_minute()
 
     insert_data_into_dim_symbol_table(data)
-
     insert_data_into_dim_date_table(data)
     insert_data_in_current_year_into_fact_gold_data_table(data)
 
@@ -176,5 +177,5 @@ def insert_data_in_database_everyday():
 
 
 # CALL insert functions
-insert_data_into_database_from_beginning()
+# insert_data_into_database_from_beginning()
 insert_data_in_database_everyday()
