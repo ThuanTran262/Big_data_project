@@ -9,7 +9,7 @@ from datetime import timedelta
 import sys
 sys.path.insert(0, "/home/thuantt/airflow/Big_data_project")
 
-from pipeline.crawling_data import insert_data_in_database_everyday 
+from pipeline.storing_data_pipeline import insert_data_in_database_everyday 
 
 interval = '0 0 * * *'
 dag = DAG(dag_id='etl_data',
